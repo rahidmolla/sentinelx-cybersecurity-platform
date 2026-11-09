@@ -4,7 +4,7 @@
 
 CYVEX (SentinelX) is a modern cybersecurity platform designed with a futuristic cyber-security aesthetic. It features a dark interface, digital Matrix Rain background, and Oxanium typography to create an immersive cybersecurity experience.
 
-🌐 **Live Website:** https://sentinelx-cybersecurity-platform-t5.vercel.app/
+🌐 **Live Website:** https://sentinelx-cybersecurity-platform-t5.vercel.app
 
 ---
 
