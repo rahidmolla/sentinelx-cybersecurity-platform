@@ -1,23 +1,14 @@
+import { env } from './config/env.js';
 import app from './app.js';
-import { ENV } from './config/env.js';
-import { connectDB } from './config/database.js';
-import { logger } from './utils/logger.js';
+import { connectDatabase } from './config/database.js';
+import logger from './utils/logger.js';
 
-async function startServer() {
-  try {
-    await connectDB();
+await connectDatabase();
 
-    app.listen(ENV.PORT, () => {
-      logger.info(`====================================================`);
-      logger.info(`🛡️  SentinelX Cybersecurity Engine Running on Port ${ENV.PORT}`);
-      logger.info(`🌐 Environment: ${ENV.NODE_ENV}`);
-      logger.info(`📡 Health Check: http://localhost:${ENV.PORT}/api/health`);
-      logger.info(`====================================================`);
-    });
-  } catch (err) {
-    logger.error('Failed to start SentinelX server', err);
-    process.exit(1);
-  }
-}
+app.listen(env.port, () => {
+  logger.info(`CYVEX API listening on port ${env.port}`);
+});
 
-startServer();
+process.on('unhandledRejection', (reason) => {
+  logger.error('Unhandled rejection in CYVEX API.', reason);
+});
