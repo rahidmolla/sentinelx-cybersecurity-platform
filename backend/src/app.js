@@ -66,3 +66,6 @@ app.use('/api/ai', aiRoutes);
 // Error handlers
 app.use(notFoundHandler);
 app.use(errorHandler);
+
+
+export default app;
