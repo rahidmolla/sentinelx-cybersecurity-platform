@@ -44,45 +44,100 @@ export function generatePdfSecurityReport(scanData) {
       else if (scanData.riskScore >= 40) scoreColor = '#eab308'; // Amber
       else if (scanData.riskScore >= 20) scoreColor = '#3b82f6'; // Blue
 
-      doc.rect(390, topY + 15, 145, 45).fill(scoreColor);
-      doc.fillColor('#ffffff').fontSize(11).text('RISK SCORE', 402, topY + 23);
-      doc.fontSize(18).text(`${scanData.riskScore}/100`, 402, topY + 38);
+      doc.rect(390, topY + 10, 150, 55).fill(scoreColor);
+      doc.fillColor('#ffffff').fontSize(11).text('RISK ASSESSMENT', 400, topY + 18, { align: 'center', width: 130 });
+      doc.fontSize(18).text(`${scanData.riskScore} / 100`, 400, topY + 32, { align: 'center', width: 130 });
+      doc.fontSize(9).text(scanData.riskLevel.toUpperCase(), 400, topY + 52, { align: 'center', width: 130 });
 
-      doc.moveDown(6);
-      doc.fillColor('#0f172a').fontSize(16).text('Executive Summary', { underline: true });
-      doc.moveDown(0.5);
-      doc.fontSize(10).text(`Risk Level: ${scanData.riskLevel} | Confidence: ${scanData.confidence}%`);
-      doc.moveDown(0.5);
-      doc.text(`This report summarizes the observable security evidence collected for ${scanData.hostname}. Findings are indicators and do not guarantee that a site is safe or malicious.`);
+      // Executive Summary
+      let currentY = 205;
+      doc.fillColor('#0f172a').fontSize(14).text('Executive Summary', 45, currentY);
+      doc.strokeColor('#0284c7').lineWidth(2).moveTo(45, currentY + 18).lineTo(180, currentY + 18).stroke();
 
-      doc.moveDown(1.5);
-      doc.fontSize(14).text('Detailed Findings', { underline: true });
-      doc.moveDown(0.5);
+      currentY += 26;
+      doc.fillColor('#334155').fontSize(10).text(
+        `CYVEX conducted a passive multi-vector security assessment of ${scanData.hostname}. The evaluation examined DNS infrastructure, SSL/TLS cryptographic posture, HTTP security headers, brand impersonation indicators, and cross-referenced public threat intelligence databases.`,
+        45,
+        currentY,
+        { width: 505, lineGap: 3 }
+      );
 
+      // Findings Section
+      currentY += 45;
+      doc.fillColor('#0f172a').fontSize(14).text(`Detected Security Findings (${(scanData.findings || []).length})`, 45, currentY);
+      doc.strokeColor('#0284c7').lineWidth(2).moveTo(45, currentY + 18).lineTo(230, currentY + 18).stroke();
+
+      currentY += 26;
       const findings = scanData.findings || [];
-      if (!findings.length) {
-        doc.fontSize(10).text('No significant security indicators were observed during this assessment.');
-      }
-      findings.forEach((finding, index) => {
-        if (doc.y > 690) doc.addPage();
-        doc.fontSize(11).fillColor('#0f172a').text(`${index + 1}. ${finding.name} (${finding.severity})`);
-        doc.fontSize(9).fillColor('#334155').text(`Category: ${finding.category || 'General'}`);
-        doc.text(`Evidence: ${finding.evidence || 'Not provided'}`);
-        if (finding.recommendation) doc.text(`Recommendation: ${finding.recommendation}`);
-        doc.moveDown(0.8);
-      });
+      if (findings.length === 0) {
+        doc.fillColor('#10b981').fontSize(10).text('No critical security vulnerabilities or phishing indicators were identified.', 45, currentY);
+        currentY += 20;
+      } else {
+        for (const f of findings.slice(0, 6)) {
+          if (currentY > 700) {
+            doc.addPage();
+            currentY = 50;
+          }
 
-      doc.moveDown(1);
-      doc.fontSize(14).fillColor('#0f172a').text('Remediation Guidance', { underline: true });
-      doc.moveDown(0.5);
-      (scanData.recommendations || []).forEach((recommendation, index) => {
-        if (doc.y > 720) doc.addPage();
-        doc.fontSize(10).fillColor('#334155').text(`${index + 1}. ${recommendation}`);
-      });
+          let badgeColor = '#64748b';
+          if (f.severity === 'Critical') badgeColor = '#ef4444';
+          else if (f.severity === 'High') badgeColor = '#f97316';
+          else if (f.severity === 'Medium') badgeColor = '#eab308';
+          else if (f.severity === 'Low') badgeColor = '#3b82f6';
+
+          doc.rect(45, currentY, 55, 15).fill(badgeColor);
+          doc.fillColor('#ffffff').fontSize(8).text(f.severity.toUpperCase(), 45, currentY + 3, { align: 'center', width: 55 });
+
+          doc.fillColor('#0f172a').fontSize(10).text(`${f.name} [${f.category || 'General'}]`, 110, currentY + 2);
+          currentY += 18;
+
+          doc.fillColor('#475569').fontSize(9).text(`Evidence: ${f.evidence}`, 55, currentY, { width: 495 });
+          currentY += 16;
+          doc.fillColor('#334155').fontSize(9).text(`Remediation: ${f.recommendation || f.explanation}`, 55, currentY, { width: 495 });
+          currentY += 22;
+        }
+      }
+
+      // Cryptographic & Header Posture
+      if (currentY > 650) {
+        doc.addPage();
+        currentY = 50;
+      }
+
+      currentY += 10;
+      doc.fillColor('#0f172a').fontSize(14).text('Security Configuration & Cryptographic Posture', 45, currentY);
+      doc.strokeColor('#0284c7').lineWidth(2).moveTo(45, currentY + 18).lineTo(340, currentY + 18).stroke();
+      currentY += 26;
+
+      const cert = scanData.certificateAnalysis?.certificate;
+      const headers = scanData.websiteSecurityAnalysis?.headers || {};
+
+      doc.fillColor('#334155').fontSize(9);
+      doc.text(`• SSL/TLS Status: ${cert ? (cert.status === 'Valid' ? 'Valid Certificate' : cert.authorizationError || 'Warning') : 'No TLS Certificate'}`, 55, currentY);
+      currentY += 14;
+      if (cert) {
+        doc.text(`• Certificate Issuer: ${cert.issuer?.organization || cert.issuer?.commonName || 'Unknown'} (Expires: ${cert.validTo?.split('T')[0] || 'N/A'})`, 55, currentY);
+        currentY += 14;
+      }
+      doc.text(`• Strict-Transport-Security (HSTS): ${headers.strictTransportSecurity ? 'Configured' : 'Missing'}`, 55, currentY);
+      currentY += 14;
+      doc.text(`• Content-Security-Policy (CSP): ${headers.contentSecurityPolicy ? 'Configured' : 'Missing'}`, 55, currentY);
+      currentY += 14;
+      doc.text(`• Anti-Clickjacking (X-Frame-Options): ${headers.xFrameOptions ? headers.xFrameOptions : 'Missing'}`, 55, currentY);
+      currentY += 14;
+      doc.text(`• MIME Sniffing Protection (X-Content-Type-Options): ${headers.xContentTypeOptions || 'Missing'}`, 55, currentY);
+
+      // Footer
+      doc.fontSize(8).fillColor('#94a3b8').text(
+        'Generated by CYVEX Security Engine. Disclaimer: Passive threat assessments reflect public observables at scan time and do not guarantee the absolute security of any target web application.',
+        45,
+        780,
+        { align: 'center', width: 505 }
+      );
 
       doc.end();
-    } catch (error) {
-      reject(error);
+    } catch (err) {
+      reject(err);
     }
   });
 }

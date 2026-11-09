@@ -44,7 +44,7 @@ export function calculateRiskScore({
       });
     }
   } else {
-    positiveSignals.push('Clean across all integrated Threat Intelligence feeds (URLhaus, SentinelX, Abuse feeds)');
+    positiveSignals.push('Clean across all integrated Threat Intelligence feeds (URLhaus, CYVEX, Abuse feeds)');
   }
 
   // 2. Phishing URL & Structural Evaluation
@@ -164,56 +164,26 @@ export function calculateRiskScore({
   }
 
   if (websiteSecurity?.securityTxtFound) {
-    positiveSignals.push('Standard security.txt vulnerability disclosure policy published (RFC 9116)');
+    positiveSignals.push('Standard security.txt vulnerability disclosure policy found');
   }
 
-  score += Math.min(headerWeight, 15); // Strict cap on headers so safe sites with omitted headers never score > 15
+  score += headerWeight;
 
-  // 6. Mitigating Factors & Positive Signals
-  if (positiveSignals.length >= 4 && !threatIntelligence?.isMalicious && !indicators.isDirectIp && !indicators.isPunycode) {
-    score = Math.max(0, score - 15);
-  } else if (positiveSignals.length >= 2 && !threatIntelligence?.isMalicious) {
-    score = Math.max(0, score - 8);
-  }
+  // Cap and classify final score
+  score = Math.min(100, Math.max(0, Math.round(score)));
+  const riskLevel = score >= 80 ? 'Critical Risk' : score >= 60 ? 'High Risk' : score >= 40 ? 'Moderate Risk' : score >= 20 ? 'Low Risk' : 'Minimal Risk';
 
-  // Bound score strictly between 0 and 100
-  const finalScore = Math.min(100, Math.max(0, Math.round(score)));
-
-  // Risk Classification
-  let riskLevel = 'Low Risk';
-  if (finalScore >= 80) {
-    riskLevel = 'Critical Risk';
-  } else if (finalScore >= 60) {
-    riskLevel = 'High Risk';
-  } else if (finalScore >= 40) {
-    riskLevel = 'Suspicious';
-  } else if (finalScore >= 20) {
-    riskLevel = 'Moderate Risk';
-  } else {
-    riskLevel = 'Low Risk';
-  }
-
-  // Calculate Confidence Score
-  const sourcesCount = (threatIntelligence?.sourcesChecked?.length || 1) +
-    (dnsAnalysis?.records?.a?.length ? 1 : 0) +
-    (certificateAnalysis?.hasTls ? 1 : 0) +
-    (websiteSecurity?.httpStatusCode ? 1 : 0);
-
-  const confidence = Math.min(98, Math.max(70, Math.round(65 + sourcesCount * 6)));
-  const evidenceCoverage = sourcesCount >= 4 ? 'Comprehensive' : sourcesCount >= 2 ? 'Standard' : 'Limited';
-
-  if (recommendations.length === 0) {
-    recommendations.push('Domain demonstrates healthy security baseline. Continue monitoring for unexpected DNS or certificate changes.');
-  }
+  const confidence = Math.min(99, Math.round(60 + (findings.length * 5)));
+  const evidenceCoverage = threatIntelWeight > 0 ? 'Comprehensive' : findings.length > 3 ? 'Expanded' : 'Standard';
 
   return {
-    riskScore: finalScore,
+    riskScore: score,
     riskLevel,
     confidence,
     evidenceCoverage,
     findings,
     positiveSignals,
-    sourcesChecked: threatIntelligence?.sourcesChecked || [],
-    recommendations
+    recommendations,
+    sourcesChecked: threatIntelligence?.sourcesChecked || []
   };
 }
