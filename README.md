@@ -23,34 +23,61 @@ CYVEX combines URL heuristics, cryptographic TLS inspection, passive website sec
 
 ## Design
 
-Near-black `#020403`, neon green accents, restrained glass surfaces, Oxanium headings/body typography, and an accessible, responsive Matrix background. The supplied logo remains undistorted with its intrinsic ratio.
+Near-black `#020403`, neon green `#00FF88`, secondary green `#00C978`, white, and muted gray. Matrix animation uses a pointer-transparent canvas and respects reduced-motion preferences. The supplied CYVEX logo is used without changing its aspect ratio.
 
-## Stack
+## Technology
 
-- Frontend: React, Vite, Tailwind CSS, React Router, Recharts, Lucide.
-- Backend: Node.js, Express, MongoDB/Mongoose, JWT, optional Gemini.
-- Local fallback: file-backed sample data when MongoDB is not configured. Configure MongoDB and unique secrets for real deployment.
+| Layer | Technologies |
+| --- | --- |
+| Frontend | React 18, Vite, Tailwind CSS, React Router, Recharts, Lucide, Framer Motion, Axios |
+| Backend | Node.js (ES modules), Express, Helmet, Zod, JWT, bcryptjs, PDFKit |
+| Persistence | MongoDB/Mongoose with a local fallback store |
+| Intelligence | URLhaus, Certificate Transparency, optional Google Safe Browsing and Gemini integrations |
 
-## Local development
+## Local setup
 
-Prerequisites: Node.js 18+ and npm. MongoDB is optional locally; the backend uses its included fallback store when no database is configured.
+Prerequisites: Node.js 18+ and npm. MongoDB is optional for local development; without it, the server uses its included fallback store.
+
+### Backend
 
 ```bash
-cd backend && npm install && npm run dev
+cd backend
+npm install
+npm run dev
 ```
 
-In another terminal:
+Default API: `http://localhost:5000` (unless `PORT` is set).
+
+### Frontend
 
 ```bash
-cd frontend && npm install && npm run dev
+cd frontend
+npm install
+npm run dev
 ```
 
-Vite uses its development proxy to send `/api` requests to the backend. The frontend defaults to the same-origin `/api` path in production.
+Default UI: `http://localhost:5173`. Vite proxies `/api` to `http://localhost:5000` for local development. For a separately hosted API, configure `VITE_API_URL` to its API base URL at build time.
+
+## Environment configuration
+
+Configure backend secrets and API credentials in the backend environment, never in frontend `VITE_*` values. See `backend/.env.example` for supported variables. `GEMINI_API_KEY` and `GOOGLE_SAFE_BROWSING_API_KEY` are optional. Use a unique `JWT_SECRET` and a durable database for hosted production; the local fallback store is not intended for production persistence.
+
+## Safe test fixtures
+
+The scanner UI includes controlled simulated phishing fixtures to demonstrate detection without contacting live malicious hosts. Use the explicitly labeled simulated samples. Fixture outcomes are synthetic and should not be interpreted as live threat-feed checks.
 
 ## API overview
 
-The Express API is mounted under `/api`; routes cover auth, URL scans, scan history/PDF reports, certificates, website-security assessments, dashboard metrics, threat intelligence, AI explanations, and community reports/admin moderation.
+- Authentication: `/api/auth/*`
+- URL scans and PDF export: `/api/scans/*`
+- Certificate analysis: `/api/certificates/analyze`
+- Website security analysis: `/api/security/analyze`
+- Community reports: `/api/reports/*`
+- Dashboard and activity: `/api/dashboard/*`
+- Threat intelligence: `/api/intelligence/*`
+- AI explanations: `/api/ai/explain`
+- Health: `/api/health`
 
-## Responsible use
+## Security and responsible use
 
-Use the scanner only on systems you own or have authorization to assess. Network-based checks are intended for defensive analysis; validate deployment SSRF protections and configure production authentication, secrets, and persistent storage before exposing the backend publicly.
+CYVEX applies pre-resolution and IP checks to mitigate SSRF, revalidates redirect destinations, and uses timeouts for passive outbound checks. Scanner output assesses observable evidence and is not a guarantee that a target is safe. Scan only systems you are authorized to assess, and follow applicable laws and responsible-disclosure practices.
