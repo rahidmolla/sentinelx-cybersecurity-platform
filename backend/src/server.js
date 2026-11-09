@@ -12,3 +12,4 @@ app.listen(env.port, () => {
 process.on('unhandledRejection', (reason) => {
   logger.error('Unhandled rejection in CYVEX API.', reason);
 });
+export default app;
