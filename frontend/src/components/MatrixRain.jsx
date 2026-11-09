@@ -1,3 +1,60 @@
-import { useEffect, useRef } from 'react';
-const glyphs='アカサタナハマヤラワ0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-export default function MatrixRain(){const canvasRef=useRef(null);useEffect(()=>{const canvas=canvasRef.current,ctx=canvas?.getContext('2d',{alpha:true});if(!canvas||!ctx)return;const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');if(reduced.matches)return;let raf=0,width=0,height=0,drops=[];const cell=18;function resize(){const dpr=Math.min(window.devicePixelRatio||1,1.5);width=window.innerWidth;height=window.innerHeight;canvas.width=Math.floor(width*dpr);canvas.height=Math.floor(height*dpr);canvas.style.width=`${width}px`;canvas.style.height=`${height}px`;ctx.setTransform(dpr,0,0,dpr,0,0);drops=Array.from({length:Math.ceil(width/cell)},()=>Math.random()*-height/cell)}function draw(){ctx.fillStyle='rgba(2,4,3,0.12)';ctx.fillRect(0,0,width,height);ctx.font='13px Oxanium, monospace';for(let i=0;i<drops.length;i++){const y=drops[i]*cell,x=i*cell,ch=glyphs[Math.floor(Math.random()*glyphs.length)];ctx.fillStyle=Math.random()>.985?'rgba(190,255,220,0.75)':'rgba(0,255,136,0.48)';ctx.fillText(ch,x,y);if(y>height&&Math.random()>.975)drops[i]=Math.random()*-18;else drops[i]+=.42}raf=requestAnimationFrame(draw)}resize();raf=requestAnimationFrame(draw);window.addEventListener('resize',resize,{passive:true});return()=>{cancelAnimationFrame(raf);window.removeEventListener('resize',resize)}},[]);return <canvas ref={canvasRef} aria-hidden="true" className="cyvex-matrix-canvas"/>}
+import React, { useEffect, useRef } from 'react';
+
+const COLUMNS = 72;
+const FONT_SIZE = 14;
+const CHARS = '01CYVEX<>/{}[]$#@%&*+=-';
+
+export default function MatrixRain() {
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas?.getContext('2d');
+    if (!canvas || !ctx) return undefined;
+
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const columns = Math.max(24, Math.floor(window.innerWidth / FONT_SIZE));
+    let drops = Array.from({ length: columns }, () => Math.random() * -80);
+    let rafId;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      canvas.width = Math.floor(window.innerWidth * dpr);
+      canvas.height = Math.floor(window.innerHeight * dpr);
+      canvas.style.width = `${window.innerWidth}px`;
+      canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      drops = Array.from({ length: Math.max(24, Math.floor(window.innerWidth / FONT_SIZE)) }, () => Math.random() * -80);
+    };
+
+    const draw = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      ctx.fillStyle = 'rgba(2, 4, 3, 0.09)';
+      ctx.fillRect(0, 0, width, height);
+      ctx.font = `${FONT_SIZE}px Oxanium, monospace`;
+      ctx.fillStyle = '#00ff88';
+      drops.forEach((drop, i) => {
+        const char = CHARS[Math.floor(Math.random() * CHARS.length)];
+        ctx.fillText(char, i * FONT_SIZE, drop * FONT_SIZE);
+        if (drop * FONT_SIZE > height && Math.random() > 0.975) drops[i] = 0;
+        drops[i] += 0.35;
+      });
+      rafId = window.requestAnimationFrame(draw);
+    };
+
+    resize();
+    if (!reducedMotion) rafId = window.requestAnimationFrame(draw);
+    else {
+      ctx.fillStyle = 'rgba(2, 4, 3, 1)';
+      ctx.fillRect(0, 0, window.innerWidth, window.innerHeight);
+    }
+    window.addEventListener('resize', resize);
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      window.removeEventListener('resize', resize);
+    };
+  }, []);
+
+  return <canvas ref={canvasRef} aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 opacity-20" />;
+}
