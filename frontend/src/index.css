@@ -1,55 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-@layer base {
-  body {
-    background-color: #070b14;
-    color: #f1f5f9;
-  }
-}
-
-/* Cyber grid background pattern */
-.cyber-grid {
-  background-size: 40px 40px;
-  background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-}
-
-.cyber-radial-glow {
-  background: radial-gradient(circle at 50% 0%, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
-}
-
-/* Glassmorphism */
-.glass-panel {
-  background: rgba(13, 21, 39, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(30, 41, 59, 0.8);
-}
-
-.glass-panel-hover {
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.glass-panel-hover:hover {
-  border-color: rgba(6, 182, 212, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(6, 182, 212, 0.1);
-}
-
-/* Custom cyber scrollbars */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-::-webkit-scrollbar-track {
-  background: #070b14;
-}
-::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #0284c7;
-}
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&display=swap');
+@tailwind base;@tailwind components;@tailwind utilities;
+:root{font-family:'Oxanium',sans-serif;color:#f4f8f5;background:#020403;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-optical-sizing:auto;font-weight:400;color-scheme:dark;--cyvex-bg:#020403;--cyvex-green:#00ff88;--cyvex-green-secondary:#00c978;--cyvex-white:#fff;--cyvex-muted:#a0a0a0}
+html{min-width:320px;min-height:100%;scroll-behavior:smooth;background:var(--cyvex-bg)}body{min-width:320px;min-height:100vh;margin:0;background:transparent;color:#f4f8f5;font-family:'Oxanium',sans-serif}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}::selection{color:#020403;background:#00ff88}#root{min-height:100vh;isolation:isolate}
+.cyvex-matrix-canvas{position:fixed;z-index:-1;inset:0;width:100%;height:100%;pointer-events:none;opacity:.34;contain:strict}.cyvex-page-glow{background:radial-gradient(ellipse at 50% 35%,rgba(0,255,136,.075),transparent 56%),radial-gradient(ellipse at 50% 110%,rgba(0,201,120,.05),transparent 45%)}.cyvex-grid{background-image:linear-gradient(rgba(0,255,136,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.045) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,black,transparent 90%)}.cyvex-enter{animation:cyvex-enter 700ms cubic-bezier(.2,.75,.25,1) both}@keyframes cyvex-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.cyvex-matrix-canvas{display:none}}
