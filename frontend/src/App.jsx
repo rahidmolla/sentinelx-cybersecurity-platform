@@ -1,30 +1,30 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext.jsx';
-import Navbar from './components/Navbar.jsx';
-import Footer from './components/Footer.jsx';
-import LandingPage from './pages/LandingPage.jsx';
-import ScanPage from './pages/ScanPage.jsx';
-import ReportDetailPage from './pages/ReportDetailPage.jsx';
-import DashboardPage from './pages/DashboardPage.jsx';
-import CertificateAnalyzerPage from './pages/CertificateAnalyzerPage.jsx';
-import WebsiteSecurityPage from './pages/WebsiteSecurityPage.jsx';
-import CommunityPage from './pages/CommunityPage.jsx';
-import ThreatExplorerPage from './pages/ThreatExplorerPage.jsx';
-import ScanHistoryPage from './pages/ScanHistoryPage.jsx';
-import AdminPage from './pages/AdminPage.jsx';
-import AuthPage from './pages/AuthPage.jsx';
-import BrandLandingPage from './pages/BrandLandingPage.jsx';
-import MatrixRain from './components/MatrixRain.jsx';
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+import MatrixRain from './components/MatrixRain';
+import BrandLandingPage from './pages/BrandLandingPage';
+import LandingPage from './pages/LandingPage';
+import DashboardPage from './pages/DashboardPage';
+import ScanPage from './pages/ScanPage';
+import ReportDetailPage from './pages/ReportDetailPage';
+import AdminPage from './pages/AdminPage';
+import AuthPage from './pages/AuthPage';
+import AiAssistantModal from './components/AiAssistantModal';
+import CertificatesPage from './pages/CertificatesPage';
+import WebsiteSecurityPage from './pages/WebsiteSecurityPage';
+import CommunityPage from './pages/CommunityPage';
+import ThreatIntelPage from './pages/ThreatIntelPage';
+import ScanHistoryPage from './pages/ScanHistoryPage';
 
-function ApplicationShell() {
-  const location = useLocation();
-  const isBrandLanding = location.pathname === '/';
+function AppShell() {
+  const isBrandRoute = useLocation().pathname === '/';
   return (
     <div className="min-h-screen flex flex-col bg-[#020403] text-slate-100">
-      {!isBrandLanding && <MatrixRain />}
+      {!isBrandRoute && <MatrixRain />}
       <div className="relative z-10 flex min-h-screen flex-col">
-        {!isBrandLanding && <Navbar />}
+        {!isBrandRoute && <Navbar />}
         <main className="flex-1">
           <Routes>
             <Route path="/" element={<BrandLandingPage />} />
@@ -32,17 +32,18 @@ function ApplicationShell() {
             <Route path="/scan" element={<ScanPage />} />
             <Route path="/scan/:id" element={<ReportDetailPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/certificates" element={<CertificateAnalyzerPage />} />
+            <Route path="/certificates" element={<CertificatesPage />} />
             <Route path="/website-security" element={<WebsiteSecurityPage />} />
             <Route path="/community" element={<CommunityPage />} />
-            <Route path="/intelligence" element={<ThreatExplorerPage />} />
+            <Route path="/intelligence" element={<ThreatIntelPage />} />
             <Route path="/history" element={<ScanHistoryPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </main>
-        {!isBrandLanding && <Footer />}
+        {!isBrandRoute && <Footer />}
+        <AiAssistantModal />
       </div>
     </div>
   );
@@ -52,7 +53,7 @@ export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
-        <ApplicationShell />
+        <AppShell />
       </BrowserRouter>
     </AuthProvider>
   );
