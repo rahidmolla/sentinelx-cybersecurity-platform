@@ -1,83 +1,122 @@
-# CYVEX — DETECT. DEFEND. TRUST.
+# CYVEX — SentinelX Cybersecurity Platform
 
-A multi-vector cybersecurity intelligence platform for URL threat detection, certificate inspection, website security posture, and collaborative threat intelligence.
+### DETECT. DEFEND. TRUST.
 
-- **Updated preview:** [Open CYVEX](https://af8adcd852c3252b8d23.agent37.app) — publicly accessible Agent37 preview.
-- **Vercel production domain:** [sentinelx-cybersecurity-platform.vercel.app](https://sentinelx-cybersecurity-platform.vercel.app) — currently serves the previous SentinelX build. The updated design will appear there after the source changes are pushed and Vercel finishes deploying them.
+CYVEX (SentinelX) is a modern cybersecurity platform designed with a futuristic cyber-security aesthetic. It features a dark interface, digital Matrix Rain background, and Oxanium typography to create an immersive cybersecurity experience.
 
-## Overview
+🌐 **Live Website:** https://sentinelx-cybersecurity-platform-t5.vercel.app/
 
-CYVEX combines URL heuristics, cryptographic TLS inspection, passive website security auditing, threat intelligence feeds, weighted risk scoring, and evidence-grounded AI explanations in one defensive platform.
+---
 
-## Features
+## 🚀 Project Overview
 
-- **URL threat scanner** (`/scan`): URL structure, brand impersonation, IDN homographs, domain entropy, and risk scoring.
-- **TLS certificate analyzer** (`/certificates`): certificate details, hostname and expiry checks, and Certificate Transparency lookups.
-- **Website security assessment** (`/website-security`): passive security-header, cookie, and `security.txt` checks with hardening guidance.
-- **Community threat reports** (`/community`): submit and browse reports with an admin verification workflow.
-- **Threat intelligence explorer** (`/intelligence`): searchable indicators and source information.
-- **SOC dashboard** (`/dashboard`): scan metrics, visualizations, activity, and threat feeds.
-- **AI analyst**: scanner-evidence-grounded explanations; Gemini integration is optional with a deterministic fallback.
-- **PDF reports**: export scan results and remediation suggestions.
-- **CYVEX landing page** (`/`): supplied logo, Oxanium type, responsive Matrix Rain, and CTA into the existing app. The prior product landing page remains at `/home`.
+SentinelX is a cybersecurity-focused web platform built to deliver a modern digital security experience through a clean, futuristic, and responsive user interface.
 
-## Design
+The project combines modern web design with a cyber-inspired visual identity, representing the mission of detecting threats, defending digital environments, and building trust.
 
-Near-black `#020403`, neon green `#00FF88`, secondary green `#00C978`, white, and muted gray. Matrix animation uses a pointer-transparent canvas and respects reduced-motion preferences. The supplied CYVEX logo is used without changing its aspect ratio.
+## ✨ Design Highlights
 
-## Technology
+- **CYVEX Branding:** Custom project identity and logo.
+- **Oxanium Typography:** Futuristic typography throughout the interface.
+- **Digital Matrix Rain:** Animated digital rain background.
+- **Dedicated Hero Section:** A separate landing experience featuring the CYVEX logo.
+- **Dark Cybersecurity Theme:** Modern, immersive visual design.
+- **Responsive Interface:** Designed for a range of screen sizes.
 
-| Layer | Technologies |
-| --- | --- |
-| Frontend | React 18, Vite, Tailwind CSS, React Router, Recharts, Lucide, Framer Motion, Axios |
-| Backend | Node.js (ES modules), Express, Helmet, Zod, JWT, bcryptjs, PDFKit |
-| Persistence | MongoDB/Mongoose with a local fallback store |
-| Intelligence | URLhaus, Certificate Transparency, optional Google Safe Browsing and Gemini integrations |
+## 🛠️ Tech Stack
 
-## Local setup
+Update this section according to the technologies actually used in the project.
 
-Prerequisites: Node.js 18+ and npm. MongoDB is optional for local development; without it, the server uses its included fallback store.
+- Frontend: [Add framework]
+- Styling: [Add CSS framework or styling approach]
+- Programming Language: [Add language]
+- Deployment: Vercel
+- Version Control: Git & GitHub
 
-### Backend
+## 🌐 Live Demo
+
+Explore the deployed platform:
+
+https://sentinelx-cybersecurity-platform-t5.vercel.app/
+
+## 📸 Screenshots
+
+Add screenshots of the following sections:
+
+- Landing / Hero Page
+- Main Dashboard
+- Cybersecurity Features
+- Responsive Mobile Interface
+
+## ⚙️ Getting Started
+
+Follow these steps to run the project locally.
+
+### 1. Clone the Repository
 
 ```bash
-cd backend
+git clone <YOUR_GITHUB_REPOSITORY_URL>
+```
+
+### 2. Navigate to the Project Directory
+
+```bash
+cd <PROJECT_DIRECTORY>
+```
+
+### 3. Install Dependencies
+
+```bash
 npm install
+```
+
+### 4. Start the Development Server
+
+```bash
 npm run dev
 ```
 
-Default API: `http://localhost:5000` (unless `PORT` is set).
+Open the local URL displayed in your terminal.
 
-### Frontend
+## 🎯 Project Goals
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+- Build a professional cybersecurity platform.
+- Create an immersive and modern user experience.
+- Establish a recognizable cybersecurity brand.
+- Explore modern frontend development and deployment.
+- Develop a foundation for future cybersecurity capabilities.
 
-Default UI: `http://localhost:5173`. Vite proxies `/api` to `http://localhost:5000` for local development. For a separately hosted API, configure `VITE_API_URL` to its API base URL at build time.
+## 🔮 Future Improvements
 
-## Environment configuration
+- Real-time threat monitoring.
+- Security analytics dashboard.
+- Threat intelligence integration.
+- Vulnerability assessment tools.
+- Authentication and user management.
+- Security alerts and notifications.
 
-Configure backend secrets and API credentials in the backend environment, never in frontend `VITE_*` values. See `backend/.env.example` for supported variables. `GEMINI_API_KEY` and `GOOGLE_SAFE_BROWSING_API_KEY` are optional. Use a unique `JWT_SECRET` and a durable database for hosted production; the local fallback store is not intended for production persistence.
+## 🤝 Contributing
 
-## Safe test fixtures
+Contributions, suggestions, and improvements are welcome.
 
-The scanner UI includes controlled simulated phishing fixtures to demonstrate detection without contacting live malicious hosts. Use the explicitly labeled simulated samples. Fixture outcomes are synthetic and should not be interpreted as live threat-feed checks.
+1. Fork the repository.
+2. Create a new feature branch.
+3. Commit your changes.
+4. Push your branch.
+5. Open a Pull Request.
 
-## API overview
+## 📄 License
 
-- Authentication: `/api/auth/*`
-- URL scans and PDF export: `/api/scans/*`
-- Certificate analysis: `/api/certificates/analyze`
-- Website security analysis: `/api/security/analyze`
-- Community reports: `/api/reports/*`
-- Dashboard and activity: `/api/dashboard/*`
-- Threat intelligence: `/api/intelligence/*`
-- AI explanations: `/api/ai/explain`
-- Health: `/api/health`
+This project is intended for educational and development purposes. Add an appropriate open-source license if you plan to distribute it.
 
-## Security and responsible use
+---
 
-CYVEX applies pre-resolution and IP checks to mitigate SSRF, revalidates redirect destinations, and uses timeouts for passive outbound checks. Scanner output assesses observable evidence and is not a guarantee that a target is safe. Scan only systems you are authorized to assess, and follow applicable laws and responsible-disclosure practices.
+<div align="center">
+
+### CYVEX
+
+**DETECT. DEFEND. TRUST.**
+
+*Securing the Digital Frontier.*
+
+</div>
