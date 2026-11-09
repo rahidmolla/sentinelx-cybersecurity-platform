@@ -57,7 +57,7 @@ const SIMULATED_FIXTURES = {
       }
     ],
     positiveSignals: [],
-    sourcesChecked: ['SentinelX Internal Threat Intelligence', 'abuse.ch URLhaus', 'PhishTank Database'],
+    sourcesChecked: ['CYVEX Internal Threat Intelligence', 'abuse.ch URLhaus', 'PhishTank Database'],
     recommendations: [
       'CRITICAL: Do not open or enter any passwords on this website.',
       'Report URL to brand protection at spoof@paypal.com.',
@@ -91,7 +91,7 @@ const SIMULATED_FIXTURES = {
       }
     ],
     positiveSignals: [],
-    sourcesChecked: ['SentinelX Internal Threat Intelligence', 'abuse.ch URLhaus'],
+    sourcesChecked: ['CYVEX Internal Threat Intelligence', 'abuse.ch URLhaus'],
     recommendations: [
       'Do not disclose Apple ID credentials or two-factor authorization codes.'
     ]
@@ -126,7 +126,7 @@ export async function runScan(req, res, next) {
           }
         ],
         positiveSignals: ['Controlled test sandbox environment'],
-        sourcesChecked: ['SentinelX Simulated Threat Engine'],
+        sourcesChecked: ['CYVEX Simulated Threat Engine'],
         recommendations: ['Demonstration test completed.']
       };
 
@@ -353,7 +353,7 @@ export async function downloadPdfReport(req, res, next) {
     const pdfBuffer = await generatePdfSecurityReport(scan);
 
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename="SentinelX_Report_${scan.hostname}.pdf"`);
+    res.setHeader('Content-Disposition', `attachment; filename="CYVEX_Report_${scan.hostname}.pdf"`);
     res.send(pdfBuffer);
   } catch (err) {
     next(err);

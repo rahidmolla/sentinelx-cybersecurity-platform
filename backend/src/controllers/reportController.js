@@ -133,7 +133,7 @@ export async function updateReportStatus(req, res, next) {
       await ThreatIntelligence.create({
         hostname: updated.hostname,
         threatType: updated.category,
-        source: 'SentinelX Community Verified',
+        source: 'CYVEX Community Verified',
         confidence: 90,
         verificationStatus: 'Confirmed Threat',
         tags: ['community-reported', updated.category.toLowerCase().replace(/\s+/g, '-')]
