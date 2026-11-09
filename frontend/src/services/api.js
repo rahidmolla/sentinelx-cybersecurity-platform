@@ -1,7 +1,9 @@
 import axios from 'axios';
 
+const API_BASE_URL = (import.meta.env.VITE_API_URL || '/api').replace(/\/$/, '');
+
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: API_BASE_URL,
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json'
@@ -42,7 +44,7 @@ export const scanApi = {
   getScans: () => api.get('/scans'),
   getScanById: (id) => api.get(`/scans/${id}`),
   deleteScan: (id) => api.delete(`/scans/${id}`),
-  getPdfUrl: (id) => `/api/scans/${id}/pdf`
+  getPdfUrl: (id) => `${API_BASE_URL}/scans/${id}/pdf`
 };
 
 export const certApi = {
