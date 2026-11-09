@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Shield, Radar, LayoutDashboard, LockKeyhole, Globe, Users, BrainCircuit, Menu, X, LogOut, Clock3, ChevronDown } from 'lucide-react';
+import { Shield, Radar, LayoutDashboard, LockKeyhole, Globe, Users, BrainCircuit, Menu, X, LogOut, Clock3 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 const NAV_ITEMS = [
@@ -18,7 +18,6 @@ export default function Navbar() {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [demoOpen, setDemoOpen] = React.useState(false);
 
   const handleLogout = () => {
     logout();
@@ -61,7 +60,6 @@ export default function Navbar() {
           <Link to="/scan" onClick={() => setMobileOpen(false)} className="col-span-2 rounded-lg bg-[#00c978] px-3 py-3 text-center text-sm font-bold text-[#020403]">Quick Scan</Link>
         </div>
       </nav>}
-      {demoOpen && <button type="button" className="sr-only" aria-label="Close demo selector" onClick={() => setDemoOpen(false)}><ChevronDown /></button>}
     </header>
   );
 }

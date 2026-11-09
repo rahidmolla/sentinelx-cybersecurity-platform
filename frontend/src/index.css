@@ -1,6 +1,56 @@
-@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@400;500;600;700;800&display=swap');
-@tailwind base;@tailwind components;@tailwind utilities;
-:root{font-family:'Oxanium',sans-serif;color:#f4f8f5;background:#020403;font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;font-optical-sizing:auto;font-weight:400;color-scheme:dark;--cyvex-bg:#020403;--cyvex-green:#00ff88;--cyvex-green-secondary:#00c978;--cyvex-white:#fff;--cyvex-muted:#a0a0a0}
-html{min-width:320px;min-height:100%;scroll-behavior:smooth;background:var(--cyvex-bg)}body{min-width:320px;min-height:100vh;margin:0;background:transparent;color:#f4f8f5;font-family:'Oxanium',sans-serif}button,input,textarea,select{font:inherit}button,a{-webkit-tap-highlight-color:transparent}::selection{color:#020403;background:#00ff88}#root{min-height:100vh;isolation:isolate}
-.cyvex-matrix-canvas{position:fixed;z-index:-1;inset:0;width:100%;height:100%;pointer-events:none;opacity:.34;contain:strict}.cyvex-page-glow{background:radial-gradient(ellipse at 50% 35%,rgba(0,255,136,.075),transparent 56%),radial-gradient(ellipse at 50% 110%,rgba(0,201,120,.05),transparent 45%)}.cyvex-grid{background-image:linear-gradient(rgba(0,255,136,.045) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,136,.045) 1px,transparent 1px);background-size:72px 72px;mask-image:linear-gradient(to bottom,black,transparent 90%)}.cyvex-enter{animation:cyvex-enter 700ms cubic-bezier(.2,.75,.25,1) both}@keyframes cyvex-enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.cyvex-matrix-canvas{display:none}}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Oxanium', system-ui, sans-serif;
+  color: #fff;
+  background: #020403;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+@layer base {
+  html { background: #020403; }
+  body {
+    min-width: 320px;
+    background: #020403;
+    color: #fff;
+    font-family: 'Oxanium', system-ui, sans-serif;
+    letter-spacing: 0.012em;
+  }
+  button, input, textarea, select { font-family: inherit; }
+  button, a { -webkit-tap-highlight-color: transparent; }
+  ::selection { color: #020403; background: #00ff88; }
+}
+
+/* Shared restrained neon palette across the existing Tailwind UI. */
+.text-cyan-300, .text-cyan-400, .text-cyan-500, .text-blue-300, .text-blue-400, .text-blue-500,
+.text-purple-300, .text-purple-400, .text-purple-500 { color: #00e982 !important; }
+.bg-cyan-500, .bg-cyan-600, .bg-blue-500, .bg-blue-600 { background-color: #00c978 !important; }
+.bg-gradient-to-r { background-image: linear-gradient(to right, #00c978, #00ff88) !important; }
+.bg-cyan-400, .bg-blue-400 { background-color: #00ff88 !important; }
+.border-cyan-300, .border-cyan-400, .border-cyan-500, .border-cyan-800, .border-blue-500,
+.border-purple-500 { border-color: rgba(0, 255, 136, 0.4) !important; }
+.hover\:text-cyan-400:hover, .hover\:text-cyan-500:hover, .hover\:text-blue-400:hover { color: #00ff88 !important; }
+.hover\:from-cyan-400:hover, .hover\:from-blue-400:hover, .hover\:to-blue-500:hover { --tw-gradient-from: #00ff88 var(--tw-gradient-from-position) !important; --tw-gradient-to: rgb(0 255 136 / 0) var(--tw-gradient-to-position) !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important; }
+
+.cyber-grid {
+  background-size: 40px 40px;
+  background-image:
+    linear-gradient(to right, rgba(0, 255, 136, 0.035) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 255, 136, 0.035) 1px, transparent 1px);
+}
+
+.glass-panel {
+  background: rgba(7, 16, 12, 0.88);
+  border: 1px solid rgba(0, 255, 136, 0.15);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+}
+
+.text-glow { text-shadow: 0 0 18px rgba(0, 255, 136, 0.45); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
